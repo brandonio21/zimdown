@@ -8,5 +8,12 @@ to markdown my notes so that they could be written in vim with no problems
 whatsoever. Here is the result.
 
 So far the process looks a little something like this
-* zimdown.sh copies all directories/files to specified location
-* zimdown.c  converts the contents of all files to markdown from zim
+#### zimdown.c
+1. Copies all files/folders to the specified new directory
+2. Converts all files to markdown (from zim)
+
+
+Suggested call looks like
+```
+zimdown <zimDirectory> <proposedMarkdownDirecctory>
+```
