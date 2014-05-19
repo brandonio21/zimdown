@@ -14,19 +14,16 @@
 #include <string.h>
 
 #include "strings.h"
+#include "symbols.h"
 
 #define FILEOPEN_READ "r"
 #define FILEOPEN_WRITE "w"
 #define EXIT_FAILURE 0
 #define EXIT_SUCCESS 1
 
-#define ZIM_MD_HEADER_DIFF 8
 
 void convertLine(char *line, char *result);
 void convertHeader(char *toConvert, char *result);
-
-
-
 
 
 int main(int argc, const char* argv[])
@@ -76,9 +73,10 @@ void convertLine(char *line, char *result)
   {
     switch (line[index])
     {
-      case '=' :
+      case ZIM_HEADER :
         convertHeader(line, result);
         return;
+      
     }
   }
 } 
