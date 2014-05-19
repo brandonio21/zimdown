@@ -103,7 +103,7 @@ void convertHeader(char *toConvert, char *result)
   /* Now we need to put that many markdown headers in front */
   int i = 0;
   for (i = 0; i < length; i++)
-    result[i] = '#';
+    result[i] = MARKDOWN_HEADER;
   /* Insert a space and then insert the message */
   result[i] = ' ';
   strcat(result, space);
