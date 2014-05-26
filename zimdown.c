@@ -64,6 +64,10 @@ int main(int argc, const char* argv[])
     for (i = 0; i < BUFSIZ; i++)
       lineToWrite[i] = '\0';
     convertLine(readFileLine, lineToWrite);
+
+    /* Now we need to remove the newline, and add two spaces before it */
+    *(strchr(lineToWrite, '\n')) = ' ';
+    strcat(lineToWrite, " \n");
     printf("Converted Line: %s", lineToWrite);
     fwrite(lineToWrite, sizeof(char), strlen(lineToWrite), writeFile);
   }
