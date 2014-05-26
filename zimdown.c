@@ -25,6 +25,7 @@
 void convertLine(char *line, char *result);
 void convertHeader(char *toConvert, char *result);
 void convertItalics(char *toConvert);
+void convertBold(char *toConvert);
 
 
 int main(int argc, const char* argv[])
@@ -82,9 +83,8 @@ void convertLine(char *line, char *result)
         convertItalics(line);
         strcpy(result, line);
         break;
-
-      case ZIM_BOLD :
     }
+    ++index;
   }
 } 
 
@@ -105,6 +105,25 @@ void convertItalics(char *toConvert)
   *(slash+1) = MARKDOWN_ITALICS;
   *secondSlash = MARKDOWN_ITALICS;
   *(secondSlash+1) = ' ';
+}
+
+void convertBold(char *toConvert)
+{
+  /* look for the first pair of asterisks */
+  char *star = strchr(toConvert, ZIM_BOLD);
+  while (star != NULL && *(star + 1) != ZIM_BOLD)
+    star = strchr(toConvert, ZIM_BOLD);
+
+  /* Now we need to find the second pair of asterisks */
+  char *secondStar = strchr(star+2, ZIM_BOLD);
+  while (secondStar != NULL && *(secondStar + 1) != ZIM_BOLD)
+    secondStar = strchr(star+2, ZIM_BOLD);
+
+  /* replace the characters */
+  *star = MARKDOWN_BOLD;
+  *(star+1) = MARKDOWN_BOLD;
+  *secondStar = MARKDOWN_BOLD;
+  *(secondStar+1) = MARKDOWN_BOLD;
 }
 
 void convertHeader(char *toConvert, char *result)
