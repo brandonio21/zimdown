@@ -24,7 +24,7 @@
 
 void convertLine(char *line, char *result);
 void convertHeader(char *toConvert, char *result);
-void convertItalics(char *toConvert);
+void convertItalics(char *toConvert, int *result);
 void convertBold(char *toConvert);
 
 
@@ -71,24 +71,38 @@ int main(int argc, const char* argv[])
 void convertLine(char *line, char *result)
 {
   int index = 0;
+  int header = 1;
   while (line[index] != '\0')
   {
+    int resultant = 0;
     switch (line[index])
     {
       case ZIM_HEADER :
-        convertHeader(line, result);
-        return;
+        if (header == 1)
+        {
+          convertHeader(line, result);
+          if (strcmp(line, result) == 0)
+          {
+            header = 0;
+            break;
+          }
+          else
+            return;
+        }
+
 
       case ZIM_ITALICS :
-        convertItalics(line);
+        convertItalics(line, &resultant);
         strcpy(result, line);
+        if (resultant == 1)
+          index-=3; /* makeup for lost characters */
         break;
     }
     ++index;
   }
 } 
 
-void convertItalics(char *toConvert)
+void convertItalics(char *toConvert, int *result)
 {
   /* look for the first pair of slashes */
   char *slash = strchr(toConvert, ZIM_ITALICS);
@@ -105,6 +119,8 @@ void convertItalics(char *toConvert)
   *(slash+1) = MARKDOWN_ITALICS;
   *secondSlash = '\0';
   *(secondSlash+1) = MARKDOWN_ITALICS;
+
+  *result = 1;
 
   /* Now let's cleverly recombine the strings */
   strcat(toConvert, slash+1);
@@ -141,11 +157,28 @@ void convertHeader(char *toConvert, char *result)
   *space = '\0';
   space++; /* increase the space pointer */
 
+
   /* Now let's find the index of the end of the message */
-  char *secondSpace = strchr(space, '=');
+  char *secondSpace = strchr(space, ZIM_HEADER);
 
   /* Now replace the end of the message space with a null terminator */
   *(secondSpace - 1) = '\0';
+
+  /* Now we need to see if the lengths of the headers are equal */
+  int secondCount = 1;
+  while (*(secondSpace + secondCount) == ZIM_HEADER)
+    secondCount++;
+
+  if ((space-1-toConvert) != secondCount)
+  {
+    /* the second header block isn't completing the header, it's not one! */
+    /* revert the string */
+    *(space-1) = ' ';
+    *(secondSpace-1) = ' ';
+    strcpy(result, toConvert);
+    return;
+  }
+
 
   /* Now that we have our header string and text, convert them to markdown */
   /* First, get the header length thing */
