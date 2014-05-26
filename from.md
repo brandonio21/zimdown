@@ -10,8 +10,7 @@ http://gorails.com/setup/ubuntu/13.10
   
 ### Creating the website  
 **1)** *rails new <websiteName>	*  
-
-	* This will take a little bit to complete the bundle process.  
+  * This will take a little bit to complete the bundle process.  
 **2)** *rails server*  
 	* This starts the localhost server that will run your website.	  
 **3)** *rails generate controller welcome index*  
