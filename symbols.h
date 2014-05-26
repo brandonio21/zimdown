@@ -25,7 +25,11 @@
 #define ZIM_BOLD '*'            /* **bold** */
 #define MARKDOWN_BOLD '*'       /* **bold** */
 
-
+/* image */
+#define ZIM_IMAGE_OPEN '{'      /* {{image}} */
+#define ZIM_IMAGE_CLOSE '}'     /* {{image}} */
+#define MARKDOWN_IMAGE_OPEN '(' 
+#define MARKDOWN_IMAGE_CLOSE ')'
 
 
 #endif

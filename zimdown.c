@@ -26,6 +26,7 @@ void convertLine(char *line, char *result);
 void convertHeader(char *toConvert, char *result);
 void convertItalics(char *toConvert, int *result);
 void convertBold(char *toConvert);
+void convertImage(char *toConvert, char *result);
 
 
 int main(int argc, const char* argv[])
@@ -66,8 +67,8 @@ int main(int argc, const char* argv[])
     convertLine(readFileLine, lineToWrite);
 
     /* Now we need to remove the newline, and add two spaces before it */
-    *(strchr(lineToWrite, '\n')) = ' ';
-    strcat(lineToWrite, " \n");
+    /**(strchr(lineToWrite, '\n')) = ' ';
+    strcat(lineToWrite, " \n");*/
     printf("Converted Line: %s", lineToWrite);
     fwrite(lineToWrite, sizeof(char), strlen(lineToWrite), writeFile);
   }
@@ -82,10 +83,12 @@ void convertLine(char *line, char *result)
   printf("Line to Convert: %s", line);
   int index = 0;
   int header = 1;
+  int image = 1;
   int changes = 0;
   while (line[index] != '\0')
   {
     int resultant = 0;
+    printf("%c\n", line[index]);
     switch (line[index])
     {
       case ZIM_HEADER :
@@ -95,6 +98,22 @@ void convertLine(char *line, char *result)
           if (strcmp(line, result) == 0)
           {
             header = 0;
+            changes = 1;
+            break;
+          }
+          else
+            return;
+        }
+
+      case ZIM_IMAGE_OPEN :
+        if (image == 1)
+        {
+          printf("%s\n", "converting img");
+          convertImage(line, result);
+          printf("%s\n", "done converting img");
+          if (strcmp(line, result) == 0)
+          {
+            image = 0;
             changes = 1;
             break;
           }
@@ -188,6 +207,46 @@ void convertBold(char *toConvert)
 
 }
 
+void convertImage(char *toConvert, char *result)
+{
+  printf("%s\n", "first process");
+  /* First, we need to find the index of the first curly brace */
+  char *brace = strchr(toConvert, ZIM_IMAGE_OPEN);
+  while (brace != NULL && *(brace + 1) != ZIM_IMAGE_OPEN)
+    brace = strchr(brace+1, ZIM_IMAGE_OPEN);
+
+  if (brace == NULL)
+  {
+    strcpy(toConvert, result);
+    return;
+  }
+
+  printf("%s\n", "second process");
+  /* second, we need to find the index of the closing curly brace */
+  char *closeBrace = strchr(toConvert, ZIM_IMAGE_CLOSE);
+  while (closeBrace != NULL && *(closeBrace + 1) != ZIM_IMAGE_CLOSE)
+    closeBrace = strchr(closeBrace+1, ZIM_IMAGE_CLOSE);
+
+  if (closeBrace == NULL)
+  {
+    strcpy(toConvert, result);
+    return;
+  }
+
+  printf("%s\n", "third process");
+  /* Now let's switch the symbols */
+  *(closeBrace) = '\0';
+  *(brace+1) = MARKDOWN_IMAGE_OPEN;
+
+
+  printf("%s\n", "combining");
+  /* Now we need to combine everything */
+  strcat(result, "![alt text]");
+  strcat(result, brace+1);
+  strcat(result, " \"Title Text\"");
+  strcat(result, ")");
+  printf("%s\n", "done");
+}
 void convertHeader(char *toConvert, char *result)
 {
   /* First, we need to find the index of the first space */
