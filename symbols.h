@@ -13,10 +13,17 @@
 #define ZIMDOWN_SYMBOLS
 
 /* headers */
-#define ZIM_HEADER '='
-#define MARKDOWN_HEADER '#'
-#define ZIM_MD_HEADER_DIFF 8
+#define ZIM_HEADER '='          /* === header === */
+#define MARKDOWN_HEADER '#'     /* ### header */
+#define ZIM_MD_HEADER_DIFF 8    /* difference in h1 vs h6 definitions */
 
+/* italics */
+#define ZIM_ITALICS '/'         /* //italics// */
+#define MARKDOWN_ITALICS '*'    /* *italics* */
+
+/* bold */
+#define ZIM_BOLD '*'            /* **bold** */
+#define MARKDOWN_BOLD '*'       /* **bold** */
 
 
 

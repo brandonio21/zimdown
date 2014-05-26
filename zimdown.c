@@ -24,6 +24,7 @@
 
 void convertLine(char *line, char *result);
 void convertHeader(char *toConvert, char *result);
+void convertItalics(char *toConvert);
 
 
 int main(int argc, const char* argv[])
@@ -76,10 +77,35 @@ void convertLine(char *line, char *result)
       case ZIM_HEADER :
         convertHeader(line, result);
         return;
-      
+
+      case ZIM_ITALICS :
+        convertItalics(line);
+        strcpy(result, line);
+        break;
+
+      case ZIM_BOLD :
     }
   }
 } 
+
+void convertItalics(char *toConvert)
+{
+  /* look for the first pair of slashes */
+  char *slash = strchr(toConvert, ZIM_ITALICS);
+  while (*(slash + 1) != ZIM_ITALICS && slash != NULL)
+    slash = strchr(toConvert, ZIM_ITALICS);
+
+  /* now that the first pair of slashes has been found, string at slash+2 */
+  char *secondSlash = strchr(slash+2, ZIM_ITALICS);
+  while (secondSlash != NULL && *(secondSlash + 1) != ZIM_ITALICS)
+    secondSlash = strchr(slash+2, ZIM_ITALICS);
+
+  /* replace the characters */
+  *slash = ' ';
+  *(slash+1) = MARKDOWN_ITALICS;
+  *secondSlash = MARKDOWN_ITALICS;
+  *(secondSlash+1) = ' ';
+}
 
 void convertHeader(char *toConvert, char *result)
 {
