@@ -143,16 +143,26 @@ void convertItalics(char *toConvert, int *result)
   }
 
   /* replace the characters */
-  *slash = '\0';
+  *slash = MARKDOWN_ITALICS;
   *(slash+1) = MARKDOWN_ITALICS;
-  *secondSlash = '\0';
-  *(secondSlash+1) = MARKDOWN_ITALICS;
+  /* Now we need to move all other things left */
+  int index = slash+2-toConvert;
+  for(index = (slash+2-toConvert); index <= secondSlash-toConvert; index++)
+    toConvert[index-1] = toConvert[index];
+
+  *(secondSlash-1) = MARKDOWN_ITALICS;
+  int secondIndex = secondSlash-toConvert+2;
+  while (toConvert[secondIndex] != '\0')
+  {
+    toConvert[secondIndex-2] = toConvert[secondIndex];
+    secondIndex++;
+  }
+  toConvert[secondIndex-2] = '\0';
 
   *result = 1;
 
   /* Now let's cleverly recombine the strings */
-  strcat(toConvert, slash+1);
-  strcat(toConvert, secondSlash+1);
+  printf("\nFinal  String: %s", toConvert);
 
 }
 
