@@ -58,8 +58,11 @@ int main(int argc, const char* argv[])
   while (fgets(readFileLine, BUFSIZ, readFile) != NULL)
   {
     /* While there are still lines to read from the file, we analyze the line */
+    printf("Read Line: %s", readFileLine);
     char lineToWrite[BUFSIZ];
+    int i = 0;
     convertLine(readFileLine, lineToWrite);
+    printf("Converted Line: %s", lineToWrite);
     fwrite(lineToWrite, sizeof(char), strlen(lineToWrite), writeFile);
   }
 
@@ -70,8 +73,10 @@ int main(int argc, const char* argv[])
 
 void convertLine(char *line, char *result)
 {
+  printf("Line to Convert: %s", line);
   int index = 0;
   int header = 1;
+  int changes = 0;
   while (line[index] != '\0')
   {
     int resultant = 0;
@@ -84,6 +89,7 @@ void convertLine(char *line, char *result)
           if (strcmp(line, result) == 0)
           {
             header = 0;
+            changes = 1;
             break;
           }
           else
@@ -96,10 +102,13 @@ void convertLine(char *line, char *result)
         strcpy(result, line);
         if (resultant == 1)
           index-=3; /* makeup for lost characters */
+        changes = 1;
         break;
     }
     ++index;
   }
+  if (changes == 0)
+    strcpy(result, line);
 } 
 
 void convertItalics(char *toConvert, int *result)
