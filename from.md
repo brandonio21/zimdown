@@ -9,7 +9,7 @@ To install:
 http://gorails.com/setup/ubuntu/13.10  
   
 ### Creating the website  
-**1)** *rails nw <webssiteName>	*  
+**1)** *rails nw <websi>	*  
 	* This will take a little bit to complete the bundle process.  
 **2)** *railssserver*  
 	* This starts the localhost server that will run your website.	  
