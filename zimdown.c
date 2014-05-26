@@ -101,10 +101,15 @@ void convertItalics(char *toConvert)
     secondSlash = strchr(slash+2, ZIM_ITALICS);
 
   /* replace the characters */
-  *slash = ' ';
+  *slash = '\0';
   *(slash+1) = MARKDOWN_ITALICS;
-  *secondSlash = MARKDOWN_ITALICS;
-  *(secondSlash+1) = ' ';
+  *secondSlash = '\0';
+  *(secondSlash+1) = MARKDOWN_ITALICS;
+
+  /* Now let's cleverly recombine the strings */
+  strcat(toConvert, slash+1);
+  strcat(toConvert, secondSlash+1);
+
 }
 
 void convertBold(char *toConvert)
@@ -124,6 +129,7 @@ void convertBold(char *toConvert)
   *(star+1) = MARKDOWN_BOLD;
   *secondStar = MARKDOWN_BOLD;
   *(secondStar+1) = MARKDOWN_BOLD;
+
 }
 
 void convertHeader(char *toConvert, char *result)
