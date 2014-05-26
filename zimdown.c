@@ -115,13 +115,26 @@ void convertItalics(char *toConvert, int *result)
 {
   /* look for the first pair of slashes */
   char *slash = strchr(toConvert, ZIM_ITALICS);
-  while (*(slash + 1) != ZIM_ITALICS && slash != NULL)
-    slash = strchr(toConvert, ZIM_ITALICS);
+  while (slash != NULL && *(slash + 1) != ZIM_ITALICS)
+    slash = strchr(slash+1, ZIM_ITALICS);
+
+  if (slash == NULL)
+  {
+    *result = 0;
+    return;
+  }
+
 
   /* now that the first pair of slashes has been found, string at slash+2 */
   char *secondSlash = strchr(slash+2, ZIM_ITALICS);
   while (secondSlash != NULL && *(secondSlash + 1) != ZIM_ITALICS)
-    secondSlash = strchr(slash+2, ZIM_ITALICS);
+    secondSlash = strchr(secondSlash+1, ZIM_ITALICS);
+
+  if (secondSlash == NULL)
+  {
+    *result = 0;
+    return;
+  }
 
   /* replace the characters */
   *slash = '\0';
