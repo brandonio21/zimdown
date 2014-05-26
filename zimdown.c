@@ -61,6 +61,8 @@ int main(int argc, const char* argv[])
     printf("Read Line: %s", readFileLine);
     char lineToWrite[BUFSIZ];
     int i = 0;
+    for (i = 0; i < BUFSIZ; i++)
+      lineToWrite[i] = '\0';
     convertLine(readFileLine, lineToWrite);
     printf("Converted Line: %s", lineToWrite);
     fwrite(lineToWrite, sizeof(char), strlen(lineToWrite), writeFile);
@@ -212,5 +214,7 @@ void convertHeader(char *toConvert, char *result)
     result[i] = MARKDOWN_HEADER;
   /* Insert a space and then insert the message */
   result[i] = ' ';
+  *(secondSpace - 1) = '\n';
+  *secondSpace = '\0';
   strcat(result, space);
 }
