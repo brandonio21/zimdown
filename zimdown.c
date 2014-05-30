@@ -10,6 +10,7 @@
 * markup format so that they can be interchanged.
 ******************************************************************************/
 #include <stdio.h>
+#include <stdlib.h>
 #include <errno.h>
 #include <string.h>
 
@@ -18,8 +19,6 @@
 
 #define FILEOPEN_READ "r"
 #define FILEOPEN_WRITE "w"
-#define EXIT_FAILURE 0
-#define EXIT_SUCCESS 1
 
 
 void convertLine(char *line, char *result);
@@ -266,18 +265,6 @@ void convertBold(char *toConvert, int *result)
   }
   
 
-}
-
-void remove_all_chars(char *str, char c)
-{
-  char *pr = str; /* to keep track of read position */
-  char *pw = str; /* to keep track of write position */
-  while (*pr) /* while read is valid */
-  {
-    *pw = *pr++;  /* set the write pointer to the read pointer */
-    pw += (*pw != c); /* Increase pw pointer if char isn't the char to remove */
-  }
-  *pw = '\0'; /* null terminate */
 }
 
 void convertImage(char *toConvert, char *result)
