@@ -29,6 +29,7 @@ zimdown <zimFile> <mdFile>
 1. Add the -i flag (inverse) to allow for md->zim conversions
 2. Completion of syntax, so all zim syntax can be converted
 3. Add the -d flag (directory) to convert entire directories.
+4. Add -h flag to produce HTML file zim->markdown->html
 
 
 ### To Compile zimdown
