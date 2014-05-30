@@ -292,6 +292,14 @@ void convertHeader(char *toConvert, char *result)
   /* Now let's find the index of the end of the message */
   char *secondSpace = strchr(space, ZIM_HEADER);
 
+  if (secondSpace == NULL) /* Not a properly formatted header! */
+  {
+    /* convert string to what it was before processing and return */
+    *(space-1) = ' ';
+    strcpy(result, toConvert);
+    return;
+  }
+
   /* Now replace the end of the message space with a null terminator */
   *(secondSpace - 1) = '\0';
 
