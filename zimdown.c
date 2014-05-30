@@ -236,7 +236,7 @@ void convertBold(char *toConvert, int *result)
     ++spaceCount;
 
   /* now we need to shift it all left */
-  char *ps = space;
+  char *ps = space-1;
   while (spaceCount > 0)
   {
     char temp = *(ps - spaceCount + 1);
