@@ -25,7 +25,7 @@
 void convertLine(char *line, char *result);
 void convertHeader(char *toConvert, char *result);
 void convertItalics(char *toConvert, int *result);
-void convertBold(char *toConvert);
+void convertBold(char *toConvert, int *result);
 void convertImage(char *toConvert, char *result);
 
 
@@ -67,8 +67,12 @@ int main(int argc, const char* argv[])
     convertLine(readFileLine, lineToWrite);
 
     /* Now we need to remove the newline, and add two spaces before it */
-    /**(strchr(lineToWrite, '\n')) = ' ';
-    strcat(lineToWrite, " \n");*/
+    char *newline;
+    if ((newline = strchr(lineToWrite, '\n')) != NULL)
+    {
+      *newline = ' ';
+      strcat(lineToWrite, " \n");
+    }
     printf("Converted Line: %s", lineToWrite);
     fwrite(lineToWrite, sizeof(char), strlen(lineToWrite), writeFile);
   }
@@ -87,8 +91,8 @@ void convertLine(char *line, char *result)
   int changes = 0;
   while (line[index] != '\0')
   {
-    int resultant = 0;
     printf("%c\n", line[index]);
+    int resultant = 0;
     switch (line[index])
     {
       case ZIM_HEADER :
@@ -121,6 +125,14 @@ void convertLine(char *line, char *result)
             return;
         }
 
+
+      case ZIM_BOLD :
+        convertBold(line, &resultant);
+        strcpy(result, line);
+        if (resultant == 1)
+          ++index;
+        changes = 1;
+        break;
 
       case ZIM_ITALICS :
         convertItalics(line, &resultant);
@@ -187,17 +199,30 @@ void convertItalics(char *toConvert, int *result)
 
 }
 
-void convertBold(char *toConvert)
+void convertBold(char *toConvert, int *result)
 {
   /* look for the first pair of asterisks */
   char *star = strchr(toConvert, ZIM_BOLD);
   while (star != NULL && *(star + 1) != ZIM_BOLD)
-    star = strchr(toConvert, ZIM_BOLD);
+    star = strchr(star+1, ZIM_BOLD);
+
+  if (star == NULL)
+  {
+    *result = 0;
+    return;
+  }
 
   /* Now we need to find the second pair of asterisks */
   char *secondStar = strchr(star+2, ZIM_BOLD);
   while (secondStar != NULL && *(secondStar + 1) != ZIM_BOLD)
-    secondStar = strchr(star+2, ZIM_BOLD);
+    secondStar = strchr(star+3, ZIM_BOLD);
+
+  if (secondStar == NULL)
+  {
+    *result = 0;
+    return;
+  }
+
 
   /* replace the characters */
   *star = MARKDOWN_BOLD;
@@ -251,6 +276,13 @@ void convertHeader(char *toConvert, char *result)
 {
   /* First, we need to find the index of the first space */
   char *space = strchr(toConvert, ' ');
+
+  if (space == NULL) /* There is no space! Not a header! Return! */
+  {
+    strcpy(result, toConvert);
+    return;
+  }
+
 
   /* Now replace the first space with a null terminator */
   *space = '\0';
