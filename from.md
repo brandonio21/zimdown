@@ -5,12 +5,12 @@ Creation-Date: 2013-11-12T18:34:15-08:00
 # Git  
 Created Tuesday 12 November 2013  
   
-**Repository - **Database containing complete files/version/revision history.   
-**Workspace - **Local working area. Does not effect repository  
-**Commit - **Push workspace to repository  
-**Conflict - **Two developers make conflicting commits, VCS generates a conflict to be manually resolved  
-**Merge - **Combining multiple changes from different working copies. Most VCS automatically merge most files  
-**Branch - **A tangential line of development for things like new features and bug fixing  
+**Repository -** Database containing complete files/version/revision history.   
+**Workspace -** Local working area. Does not effect repository  
+**Commit -** Push workspace to repository  
+**Conflict -** Two developers make conflicting commits, VCS generates a conflict to be manually resolved  
+**Merge -** Combining multiple changes from different working copies. Most VCS automatically merge most files  
+**Branch -** A tangential line of development for things like new features and bug fixing  
   
 --Types of version control--  
 	__Local Version Control__  
@@ -30,7 +30,7 @@ Created Tuesday 12 November 2013
 	*git status *- gives status about the directory you are currently in, also lists modified files.  
 	*git init . *- initializes an empty git repository in the current directory  
 	  
-	**Untracked Files - **Files inside of a git directory that aren't inside of the repository  
+	**Untracked Files -** Files inside of a git directory that aren't inside of the repository  
   
 2)__ FIRST COMMIT__  
   
@@ -80,8 +80,8 @@ Created Tuesday 12 November 2013
   
 	**Promotes open-sourceness and allows for easy exchanging of code.**  
 	  
-	**Fork - **A complete copy of a repository at any specific time. Allows independent development of projects by other people.  
-	**Pull request - **A signal sent to the owner of the repository to pull the changes from your repository and put them into the main repository.  
+	**Fork -** A complete copy of a repository at any specific time. Allows independent development of projects by other people.  
+	**Pull request -** A signal sent to the owner of the repository to pull the changes from your repository and put them into the main repository.  
 	  
 	http://help.github.com/articles/fork-a-repo  
 	http://help.github.com/articles/using-pull-requests  

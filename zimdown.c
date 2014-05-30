@@ -129,8 +129,6 @@ void convertLine(char *line, char *result)
       case ZIM_BOLD :
         convertBold(line, &resultant);
         strcpy(result, line);
-        if (resultant == 1)
-          ++index;
         changes = 1;
         break;
 
@@ -230,6 +228,56 @@ void convertBold(char *toConvert, int *result)
   *secondStar = MARKDOWN_BOLD;
   *(secondStar+1) = MARKDOWN_BOLD;
 
+  /* Markdown bolding must be **cccc** where c is a character. Remove spaces */
+  char *space;
+  int spaceCount = 0;
+
+  /* Let's count how many spaces there are */
+  while (*(space = (star+2+spaceCount)) == ' ')
+    ++spaceCount;
+
+  /* now we need to shift it all left */
+  char *ps = space;
+  while (spaceCount > 0)
+  {
+    char temp = *(ps - spaceCount + 1);
+    *(ps - spaceCount + 1) = *star;
+    *star = temp;
+
+    star++;
+    spaceCount--;
+  }
+
+  /* Now let's count how many spaces are to the left of second set */
+  spaceCount = 0;
+  while (*(space = (secondStar-1-spaceCount)) == ' ')
+    ++spaceCount;
+
+  /* Now let's shift it all left */
+  ps = space+1;
+  while (spaceCount > 0)
+  {
+    char temp = *(ps + spaceCount - 1);
+    *(ps + spaceCount - 1) = *(secondStar+1);
+    *(secondStar+1) = temp;
+
+    secondStar--;
+    spaceCount--;
+  }
+  
+
+}
+
+void remove_all_chars(char *str, char c)
+{
+  char *pr = str; /* to keep track of read position */
+  char *pw = str; /* to keep track of write position */
+  while (*pr) /* while read is valid */
+  {
+    *pw = *pr++;  /* set the write pointer to the read pointer */
+    pw += (*pw != c); /* Increase pw pointer if char isn't the char to remove */
+  }
+  *pw = '\0'; /* null terminate */
 }
 
 void convertImage(char *toConvert, char *result)
