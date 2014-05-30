@@ -90,7 +90,6 @@ void convertLine(char *line, char *result)
   int changes = 0;
   while (line[index] != '\0')
   {
-    printf("%c\n", line[index]);
     int resultant = 0;
     switch (line[index])
     {
@@ -173,14 +172,55 @@ void convertItalics(char *toConvert, int *result)
   /* replace the characters */
   *slash = MARKDOWN_ITALICS;
   *(slash+1) = MARKDOWN_ITALICS;
+  *secondSlash = MARKDOWN_ITALICS;
+  *(secondSlash+1) = MARKDOWN_ITALICS;
 
+  /* Now we need to shift the whitespace out */
+  char *whitespace;   
+  int whitespaceCount = 0;
+
+  /* let's count how many spaces there are */
+  while (*(whitespace = (slash+2+whitespaceCount)) == ' ' || *whitespace == '\t')
+    ++whitespaceCount;
+
+  /* now let's swap it all out */
+  char *ps = whitespace-1;
+  while (whitespaceCount > 0)
+  {
+    char temp = *(ps - whitespaceCount + 1); /* set temp to first whitespace */
+    *(ps - whitespaceCount + 1) = *slash;    /* swap first space and white */
+    *(slash) = temp;
+
+    slash++;
+    whitespaceCount--;
+  }
+  
+
+  
+
+  /* Let's count whitespace before italics things */
+  whitespaceCount = 0;
+  while (*(whitespace = secondSlash-1-whitespaceCount) == ' ' || 
+           *whitespace == '\t')
+    ++whitespaceCount;
+
+  /* now let's shift it all out */
+  ps = whitespace+1;
+  while (whitespaceCount > 0)
+  {
+    char temp = *(ps + whitespaceCount - 1);
+    *(ps + whitespaceCount - 1) = *(secondSlash+1);
+    *(secondSlash+1) = temp;
+
+    secondSlash--;
+    whitespaceCount--;
+  }
   /* Now we need to move all other things left */
   int index = slash+2-toConvert;
   for(index = (slash+2-toConvert); index <= secondSlash-toConvert; index++)
     toConvert[index-1] = toConvert[index];
 
   /* Now let's move all the things after the slashes left */
-  *(secondSlash-1) = MARKDOWN_ITALICS;
   int secondIndex = secondSlash-toConvert+2;
   while (toConvert[secondIndex] != '\0')
   {
