@@ -272,7 +272,7 @@ void convertBold(char *toConvert, int *result)
   int spaceCount = 0;
 
   /* Let's count how many spaces there are */
-  while (*(space = (star+2+spaceCount)) == ' ')
+  while (*(space = (star+2+spaceCount)) == ' ' || *space == '\t')
     ++spaceCount;
 
   /* now we need to shift it all left */
@@ -289,7 +289,7 @@ void convertBold(char *toConvert, int *result)
 
   /* Now let's count how many spaces are to the left of second set */
   spaceCount = 0;
-  while (*(space = (secondStar-1-spaceCount)) == ' ')
+  while (*(space = (secondStar-1-spaceCount)) == ' ' || *space == '\t')
     ++spaceCount;
 
   /* Now let's shift it all left */
